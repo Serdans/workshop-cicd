@@ -1,5 +1,6 @@
 pipeline {
-    agent {
+	dir('code') {
+		    agent {
         label 'master'
     }
     stages {
@@ -60,4 +61,5 @@ pipeline {
             }
         }
     }
+	}
 }
