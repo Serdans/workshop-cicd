@@ -74,10 +74,5 @@ pipeline {
                 echo 'Deploy'
             }
         }
-        stage('Do a cool dance'){
-            steps {
-                echo 'Do a little dance, make a little love, get down tonight'
-            }
-        }
     }
 }
