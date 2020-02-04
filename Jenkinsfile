@@ -9,7 +9,12 @@ pipeline {
             }
             steps {
                 echo 'Prepare'
-				sh 'npm install'
+                dir('code/frontend'){
+                     sh 'npm i '
+                }
+                dir('code/backend'){
+                     sh 'npm i '
+                }
             }
         }
         stage('Build') {
@@ -17,12 +22,14 @@ pipeline {
                 docker { image 'node:alpine' }
             }
             steps {
-                echo 'Build'				
-				dir ('code') {
-					sh 'npm run build'
-				}
-				
-			}
+                echo 'Build'
+                dir('code/frontend'){
+                     sh 'npm run build'
+                }
+                dir('code/backend'){
+                     sh 'npm run build'
+                }  
+            }
         }
         stage('Static Analysis') {
             agent {
@@ -30,9 +37,6 @@ pipeline {
             }
             steps {
                 echo 'Analyze' 
-				dir ('code') {
-					sh 'npm run lint'
-				}
             }
         }
         stage('Unit Test') {
@@ -41,33 +45,26 @@ pipeline {
             }
             steps {
                 echo 'Test'
-				sh 'npm run test'
             }
         }
         stage('e2e Test') {
-            steps {            			
+            steps {             
                 echo 'e2e Test'
-				dir ('code') {
-					sh 'docker-compose -f docker-compose-e2e.yml build'
-					sh 'docker-compose -f docker-compose-e2e.yml up -d frontend backend'
-				}
-
             }
             post {
                 always {
                     echo 'Cleanup'
-					dir ('code') {
-						sh 'docker-compose -f docker-compose-e2e.yml down --rmi=all -v'
-					}
                 }
             }
         }
         stage('Deploy') {
             steps {                
                 echo 'Deploy'
-				dir ('code') {
-					sh 'docker-compose -f docker-compose.yml build'
-				}
+            }
+        }
+        stage('Do a cool dance'){
+            steps {
+                echo 'Do a little dance, make a little love, get down tonight'
             }
         }
     }
