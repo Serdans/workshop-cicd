@@ -18,7 +18,10 @@ pipeline {
             }
             steps {
                 echo 'Build'				
-				sh 'npm run build'
+				dir ('code') {
+					sh 'npm run build'
+				}
+				
 			}
         }
         stage('Static Analysis') {
@@ -27,7 +30,9 @@ pipeline {
             }
             steps {
                 echo 'Analyze' 
-				sh 'npm run lint'
+				dir ('code') {
+					sh 'npm run lint'
+				}
             }
         }
         stage('Unit Test') {
